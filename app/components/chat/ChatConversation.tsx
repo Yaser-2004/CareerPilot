@@ -39,6 +39,7 @@ import ScheduleTimePicker from "./ScheduleTimePicker";
 import CallbackTimePicker from "./CallbackTimePicker";
 import NextActionsCard from "./NextActionCards";
 import AskAnotherQuestionCard from "./AskAnotherQuestionCard";
+import { MobileTopBar } from "./MobileTobBar";
 
 export function ChatConversation() {
     const messages = useMessages();
@@ -151,10 +152,10 @@ export function ChatConversation() {
     ];
 
     return (
-        <section className="flex h-screen w-full md:w-2/3 flex-col bg-[#FAFBFC]">
+        <section className="flex w-full md:w-2/3 flex-col bg-[#FAFBFC]">
             {/* Top Navigation Bar matching the header of Screenshot 2026-06-29 155455.png */}
             <div className="flex items-end justify-between border-b border-gray-200 bg-white px-8 py-5">
-                <div className="flex items-center gap-2 justify-between md:justify-start">
+                <div className="max-sm:w-full flex items-center gap-2 justify-between md:justify-start">
                     <div className="flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-[#10B981]" />
                         <span className="text-[13px] font-bold uppercase tracking-wider text-[#1E293B]">
@@ -180,10 +181,12 @@ export function ChatConversation() {
                 </div>
             </div>
 
+            <MobileTopBar />
+
             {/* Chat Area Framework */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto px-6 py-8 md:px-8 md:py-12"
+                className="h-full overflow-y-auto px-3 py-8 md:px-8 md:py-12"
             >
                 <div className="mx-auto flex max-w-3xl flex-col gap-4">
                     <AnimatePresence initial={false}>
@@ -197,7 +200,7 @@ export function ChatConversation() {
 
                                 {message.content.includes("shortlisted the best Online MBA programmes") &&
                                     recommendations.length > 0 && (
-                                        <div className="mt-5 space-y-4 grid grid-cols-2 gap-4 space-x-4">
+                                        <div className="mt-5 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 space-x-4">
                                             {recommendations.map(
                                                 (programme, i) => (
                                                     <ProgrammeCard

@@ -4,7 +4,7 @@ import { JourneyPanel } from "@/app/components/chat/JourneyPanel";
 
 export default function ChatPage() {
   return (
-    <main className="flex h-screen overflow-hidden">
+    <main className="flex h-screen">
       <ChatSidebar />
       <ChatConversation />
       <JourneyPanel />

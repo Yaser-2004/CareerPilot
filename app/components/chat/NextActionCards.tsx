@@ -13,7 +13,7 @@ export default function NextActionsCard() {
                 What would you like to do next?
             </h3>
 
-            <div className="mt-5 grid grid-cols-2 gap-3">
+            <div className="mt-5 grid grid-cols-1 md:grid-cols-2 gap-3">
 
                 <button
                     onClick={schedule}
