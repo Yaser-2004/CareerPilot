@@ -152,7 +152,7 @@ export function ChatConversation() {
     ];
 
     return (
-        <section className="flex w-full md:w-2/3 flex-col bg-[#FAFBFC]">
+        <section className="flex w-full md:w-2/3 flex-col bg-[#FAFBFC] h-full min-h-0 overflow-hidden">
             {/* Top Navigation Bar matching the header of Screenshot 2026-06-29 155455.png */}
             <div className="flex items-end justify-between border-b border-gray-200 bg-white px-8 py-5">
                 <div className="max-sm:w-full flex items-center gap-2 justify-between md:justify-start">
@@ -186,7 +186,7 @@ export function ChatConversation() {
             {/* Chat Area Framework */}
             <div
                 ref={scrollRef}
-                className="h-full overflow-y-auto px-3 py-8 md:px-8 md:py-12"
+                className="flex-1 min-h-0 overflow-y-auto px-3 py-8 md:px-8 md:py-12"
             >
                 <div className="mx-auto flex max-w-3xl flex-col gap-4">
                     <AnimatePresence initial={false}>
