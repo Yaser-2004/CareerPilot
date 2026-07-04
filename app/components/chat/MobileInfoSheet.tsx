@@ -9,6 +9,7 @@ import {
     usePhase,
     useRecommendations,
     useFeeBreakdown,
+    useAdmissionExpert,
 } from "@/app/stores/chat.selectors";
 
 function getActiveJourneyId(phase: string) {
@@ -32,6 +33,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
         useChatStore((state) => state.conversation.profile) || {};
     const recommendations = useRecommendations();
     const fee = useFeeBreakdown();
+    const expert = useAdmissionExpert();
 
     const fields = [
         { label: "NAME", value: profile.name },
@@ -359,14 +361,12 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                                             </div>
                                         )}
 
-                                        <a
-                                            href={fee.applyUrl}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="mt-3 block rounded-xl bg-[#E2374D] py-3 text-center text-[14px] font-semibold text-white transition hover:opacity-90"
+                                        <button
+                                            onClick={expert}
+                                            className="hover:cursor-pointer hover:scale-[1.02] w-full mt-6 block rounded-xl bg-[#E2374D] py-3 text-center font-semibold text-white transition hover:opacity-90"
                                         >
-                                            Visit Programme →
-                                        </a>
+                                            Connect with Admission Expert
+                                        </button>
                                     </div>
                                 )}
                             </div>
