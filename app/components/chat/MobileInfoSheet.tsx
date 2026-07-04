@@ -317,30 +317,6 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
 
                                 {fee && (
                                     <div className="space-y-3 text-sm">
-                                        <div className="flex justify-between">
-                                            <span className="text-[11px] font-semibold uppercase text-gray-500">
-                                                Tuition
-                                            </span>
-                                            <span className="font-semibold text-[#0F172A]">
-                                                ₹
-                                                {fee.semesterFee?.toLocaleString(
-                                                    "en-IN"
-                                                )}
-                                                /semester
-                                            </span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-[11px] font-semibold uppercase text-gray-500">
-                                                Registration
-                                            </span>
-                                            <span className="font-semibold text-[#0F172A]">
-                                                ₹
-                                                {fee.admissionFee.toLocaleString(
-                                                    "en-IN"
-                                                )}
-                                            </span>
-                                        </div>
-                                        <hr className="border-slate-100" />
                                         <div className="flex justify-between text-base font-bold">
                                             <span>Total</span>
                                             <span className="text-[#E2374D]">
@@ -350,6 +326,23 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                                                 )}
                                             </span>
                                         </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-[11px] font-semibold uppercase text-gray-500">
+                                                Per Semester
+                                            </span>
+                                            <span className="font-semibold text-[#0F172A]">
+                                                ₹
+                                                {fee.semesterFee?.toLocaleString(
+                                                    "en-IN"
+                                                )}
+                                                /semester
+                                            </span>
+                                        </div>
+                                        <div className="mt-4 text-sm text-green-800 py-2 text-center w-full rounded-lg border border-green-200 bg-green-50">
+                                            Exclusive Scholarship of Up to <span className="font-semibold">20%</span>
+                                        </div>
+                                        <div className="mt-4 w-full h-[1px] bg-black/10"></div>
+
 
                                         {fee.emiAvailable && (
                                             <div className="mt-2 rounded-lg bg-green-50 p-3 text-[12px] text-green-700">
