@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Send, PanelRightOpen, StickyNote } from "lucide-react";
+import { Send, PanelRightOpen, StickyNote, GraduationCap } from "lucide-react";
 import { MobileInfoSheet } from "./MobileInfoSheet";
 import ProgrammeCard from "./ProgrammeCard";
 import FeeBreakdownCard from "./FeeBreakdownCard";
@@ -40,6 +40,7 @@ import CallbackTimePicker from "./CallbackTimePicker";
 import NextActionsCard from "./NextActionCards";
 import AskAnotherQuestionCard from "./AskAnotherQuestionCard";
 import { MobileTopBar } from "./MobileTobBar";
+import Link from "next/link";
 
 export function ChatConversation() {
     const messages = useMessages();
@@ -156,12 +157,21 @@ export function ChatConversation() {
             {/* Top Navigation Bar matching the header of Screenshot 2026-06-29 155455.png */}
             <div className="flex items-end justify-between border-b border-gray-200 bg-white px-8 py-5">
                 <div className="max-sm:w-full flex items-center gap-2 justify-between md:justify-start">
-                    <div className="flex items-center gap-2">
+                    <div className="hidden md:flex items-center gap-2">
                         <span className="h-2 w-2 rounded-full bg-[#10B981]" />
                         <span className="text-[13px] font-bold uppercase tracking-wider text-[#1E293B]">
                             ADMISSIONS ASSISTANT
                         </span>
                     </div>
+
+                    <Link href="/" className="flex items-center gap-3 md:hidden">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E2374D] text-white">
+                            <GraduationCap className="h-5 w-5" />
+                        </div>
+                        <span className="text-[19px] font-bold tracking-tight text-[#002B49]">
+                            CareerPilot
+                        </span>
+                    </Link>
 
                     {/* Mobile-only info toggle */}
                     <button
