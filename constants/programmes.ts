@@ -5,7 +5,7 @@ export const programmes: Programme[] = [
         id: "mba_lpu",
         programmeName: "Online MBA",
         degree: "MBA",
-        university: "LPU Online",
+        university: "Lovely Professional University",
         duration: "2 Years",
         mode: "Online",
         fees: {
@@ -52,7 +52,7 @@ export const programmes: Programme[] = [
         id: "mba_manipal",
         programmeName: "Online MBA",
         degree: "MBA",
-        university: "Online Manipal (MUJ)",
+        university: "Manipal University Jaipur",
         duration: "2 Years",
         mode: "Online",
         fees: {
@@ -96,7 +96,7 @@ export const programmes: Programme[] = [
         id: "mba_amity",
         programmeName: "Online MBA (Standard)",
         degree: "MBA",
-        university: "Amity University Online",
+        university: "Amity University",
         duration: "2 Years",
         mode: "Online",
         fees: {
@@ -141,7 +141,7 @@ export const programmes: Programme[] = [
         id: "mba_uttaranchal",
         programmeName: "Online MBA",
         degree: "MBA",
-        university: "Uttaranchal University Online",
+        university: "Uttaranchal University (UU)",
         duration: "2 Years",
         mode: "Online",
         fees: {

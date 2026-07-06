@@ -10,6 +10,7 @@ import { FlowStep } from "@/app/types/conversation";
 import { FeeBreakdown } from "./fees.service";
 import { Programme } from "../types/programme";
 import { RouterResponse } from "./router.service";
+import { StudentProfile } from "../types/profile";
 
 interface HandleChatResult {
     reply: string;
@@ -67,17 +68,25 @@ export async function handleChat(
         );
 
         if (selected) {
-            const profileUpdates = {
+            // const profileUpdates = {
+            //     chosenProgramme: selected.programme.university,
+            // };
+
+            const profileUpdates: Partial<StudentProfile> = {
                 chosenProgramme: selected.programme.university,
             };
 
-            const leadId = conversation.profile.crmLeadId;
+            const updatedProfile = {
+                ...conversation.profile,
+                ...profileUpdates,
+            };
+
+            let leadId = conversation.profile.crmLeadId;
+
+            leadId = await saveLead(updatedProfile);
 
             if (leadId) {
-                await updateChosenProgramme(
-                    leadId,
-                    selected.programme.university
-                );
+                profileUpdates.crmLeadId = leadId;
             }
 
             const feeBreakdown = getFeeBreakdown(
@@ -141,11 +150,11 @@ export async function handleChat(
     const completed =
         flow.nextStep === "recommendations";
 
-    if (completed) {
-        const crmLeadId = await saveLead(updatedProfile);
+    // if (completed) {
+    //     const crmLeadId = await saveLead(updatedProfile);
 
-        flow.profileUpdates.crmLeadId = crmLeadId;
-    }
+    //     flow.profileUpdates.crmLeadId = crmLeadId;
+    // }
 
     return {
         reply: flow.reply,

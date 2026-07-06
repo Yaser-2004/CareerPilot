@@ -56,7 +56,8 @@ export async function saveLead(
     if (
         !profile.name ||
         !profile.phone ||
-        !profile.email
+        !profile.email ||
+        !profile.chosenProgramme
     ) {
         return;
     }
