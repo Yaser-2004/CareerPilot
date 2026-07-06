@@ -6,6 +6,7 @@ import { Send, PanelRightOpen, StickyNote, GraduationCap } from "lucide-react";
 import { MobileInfoSheet } from "./MobileInfoSheet";
 import ProgrammeCard from "./ProgrammeCard";
 import FeeBreakdownCard from "./FeeBreakdownCard";
+import { useOpenInfoSheet } from "@/app/stores/chat.selectors";
 
 import { ChatMessage } from "@/app/types/chat";
 import { FlowStep } from "@/app/types/conversation";
@@ -60,6 +61,7 @@ export function ChatConversation() {
     const conversation = useConversation();
     const selectDate = useSelectCounsellingDate();
     const [showNextActions, setShowNextActions] = useState(false);
+    const openInfoSheet = useOpenInfoSheet();
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const node = MBA_FLOW[currentStep] ?? {
@@ -175,7 +177,7 @@ export function ChatConversation() {
 
                     {/* Mobile-only info toggle */}
                     <button
-                        onClick={() => setIsMobileSheetOpen(true)}
+                        onClick={() => openInfoSheet("profile")}
                         className="ml-1 grid h-8 px-3 place-items-center rounded-lg bg-[#FEE2E2] text-[#E2374D] transition active:scale-95 md:hidden"
                         aria-label="View journey info"
                     >
@@ -312,10 +314,7 @@ export function ChatConversation() {
                 </div>
             </div>
             {/* Mobile Info Sheet */}
-            <MobileInfoSheet
-                isOpen={isMobileSheetOpen}
-                onClose={() => setIsMobileSheetOpen(false)}
-            />
+            <MobileInfoSheet />
         </section>
     );
 }

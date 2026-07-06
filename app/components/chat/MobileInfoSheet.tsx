@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, GraduationCap } from "lucide-react";
 import { JOURNEY_STEPS } from "@/constants/data";
@@ -10,6 +10,9 @@ import {
     useRecommendations,
     useFeeBreakdown,
     useAdmissionExpert,
+    useInfoSheetOpen,
+    useCloseInfoSheet,
+    useInfoSheetSection,
 } from "@/app/stores/chat.selectors";
 
 function getActiveJourneyId(phase: string) {
@@ -24,7 +27,7 @@ interface MobileInfoSheetProps {
     onClose: () => void;
 }
 
-export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
+export function MobileInfoSheet() {
     const phase = usePhase();
     const activeId = getActiveJourneyId(phase);
     const activeIndex = JOURNEY_STEPS.findIndex((x) => x.id === activeId);
@@ -34,6 +37,15 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
     const recommendations = useRecommendations();
     const fee = useFeeBreakdown();
     const expert = useAdmissionExpert();
+
+    const open = useInfoSheetOpen();
+    const close = useCloseInfoSheet();
+    const targetSection = useInfoSheetSection();
+
+    const profileRef = useRef<HTMLDivElement>(null);
+    const shortlistRef = useRef<HTMLDivElement>(null);
+    const feesRef = useRef<HTMLDivElement>(null);
+    const applicationsRef = useRef<HTMLDivElement>(null);
 
     const fields = [
         { label: "NAME", value: profile.name },
@@ -47,7 +59,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
 
     // Lock body scroll when open
     useEffect(() => {
-        if (isOpen) {
+        if (open) {
             document.body.style.overflow = "hidden";
         } else {
             document.body.style.overflow = "";
@@ -55,11 +67,29 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
         return () => {
             document.body.style.overflow = "";
         };
-    }, [isOpen]);
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return;
+
+        const refs = {
+            profile: profileRef,
+            recommendations: shortlistRef,
+            fees: feesRef,
+            applications: applicationsRef,
+        };
+
+        setTimeout(() => {
+            refs[targetSection as keyof typeof refs]?.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }, 250);
+    }, [open, targetSection]);
 
     return (
         <AnimatePresence>
-            {isOpen && (
+            {open && (
                 <>
                     {/* Backdrop */}
                     <motion.div
@@ -67,7 +97,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        onClick={onClose}
+                        onClick={close}
                         className="fixed inset-0 z-50 bg-black/40 md:hidden"
                     />
 
@@ -95,7 +125,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                             </div>
 
                             <button
-                                onClick={onClose}
+                                onClick={close}
                                 className="flex items-center gap-1.5 text-[13px] font-semibold text-[#E2374D] active:opacity-70"
                             >
                                 Close
@@ -199,7 +229,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                             </div>
 
                             {/* ─── About You ─── */}
-                            <div className="mt-5 border-2 border-blue-600 border-dashed rounded-xl bg-blue-50 p-5">
+                            <div ref={profileRef} className="mt-5 border-2 border-blue-600 border-dashed rounded-xl bg-blue-50 p-5">
                                 <div className="flex items-center justify-between pb-3">
                                     <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
                                         About You
@@ -241,7 +271,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                             </div>
 
                             {/* ─── Shortlist ─── */}
-                            <div className="mt-5  rounded-xl border-2 border-green-600 border-dashed bg-green-50 p-5">
+                            <div ref={shortlistRef} className="mt-5  rounded-xl border-2 border-green-600 border-dashed bg-green-50 p-5">
                                 <div className="flex items-center justify-between pb-3">
                                     <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
                                         Shortlist
@@ -294,7 +324,7 @@ export function MobileInfoSheet({ isOpen, onClose }: MobileInfoSheetProps) {
                             </div>
 
                             {/* ─── Fees & Enrolment ─── */}
-                            <div className="mt-5  rounded-xl border-2 border-purple-600 border-dashed bg-purple-50 p-5">
+                            <div ref={feesRef} className="mt-5  rounded-xl border-2 border-purple-600 border-dashed bg-purple-50 p-5">
                                 <div className="flex items-center justify-between pb-3">
                                     <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-400">
                                         Fees · Enrolment

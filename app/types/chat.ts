@@ -73,4 +73,7 @@ export interface ConversationState {
         date: string;
         iso: string;
     };
+
+    isInfoSheetOpen: boolean;
+    infoSheetSection: "profile" | "recommendations" | "fees";
 }

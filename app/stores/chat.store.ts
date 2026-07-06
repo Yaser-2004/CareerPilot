@@ -9,8 +9,7 @@ import { FeeBreakdown } from "../services/fees.service";
 import { buildSummary } from "../services/summary.service";
 import { getSuggestionsForStep } from "../api/chat/chatHelpers";
 import { interpolate } from "../services/flow.service";
-import { getSlotsForDate } from "@/app/services/schedule.service";
-import { updateAdmissionExpertRequest, updateCallbackRequest, updateCounsellingSlot } from "../services/lead.service";
+import axios from "axios";
 
 const initialConversation: ConversationState = {
     messages: [],
@@ -40,6 +39,9 @@ const initialConversation: ConversationState = {
     isInputLocked: false,
 
     selectedCounsellingDate: undefined,
+
+    isInfoSheetOpen: false,
+    infoSheetSection: "profile",
 };
 
 interface ChatResult {
@@ -90,6 +92,9 @@ interface ChatStore {
     ) => Promise<void>;
 
     resetConversation: () => void;
+
+    openInfoSheet: (section: "profile" | "recommendations" | "fees") => void;
+    closeInfoSheet: () => void;
 }
 
 interface ChatApiResponse {
@@ -768,11 +773,15 @@ Please choose your preferred date and time to book your free counselling session
             const selectedDate =
                 get().conversation.selectedCounsellingDate!;
 
-            await updateCounsellingSlot(
-                get().conversation.profile.crmLeadId!,
-                selectedDate.iso,
-                time
-            );
+            await axios.post("/api/lead/update", {
+                crmLeadId: get().conversation.profile.crmLeadId,
+                updates: {
+                    videoCounsellingSlot: {
+                        date: selectedDate.iso,
+                        time,
+                    },
+                },
+            });
 
             set((state) => ({
                 conversation: {
@@ -845,10 +854,12 @@ You'll also receive a confirmation on your WhatsApp shortly.`,
                 get().conversation.profile.crmLeadId;
 
             if (leadId) {
-                await updateAdmissionExpertRequest(
-                    leadId,
-                    true
-                );
+                await axios.post("/api/lead/update", {
+                    crmLeadId: leadId,
+                    updates: {
+                        admissionExpertRequested: true,
+                    },
+                });
             }
 
             set((state) => ({
@@ -974,10 +985,12 @@ Please keep your phone nearby. We look forward to speaking with you!`,
                 get().conversation.profile.crmLeadId;
 
             if (leadId) {
-                await updateCallbackRequest(
-                    leadId,
-                    slot
-                );
+                await axios.post("/api/lead/update", {
+                    crmLeadId: leadId,
+                    updates: {
+                        preferredCallbackTime: slot,
+                    },
+                });
             }
 
             set((state) => ({
@@ -1034,6 +1047,25 @@ We'll do our best to contact you within your preferred time slot.`,
                             type: "ask_another_question",
                         },
                     ],
+                },
+            }));
+        },
+
+        openInfoSheet(section) {
+            set((state) => ({
+                conversation: {
+                    ...state.conversation,
+                    isInfoSheetOpen: true,
+                    infoSheetSection: section,
+                },
+            }));
+        },
+
+        closeInfoSheet() {
+            set((state) => ({
+                conversation: {
+                    ...state.conversation,
+                    isInfoSheetOpen: false,
                 },
             }));
         },

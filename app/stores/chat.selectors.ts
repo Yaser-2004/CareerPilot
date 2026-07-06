@@ -94,3 +94,15 @@ export const useSelectCounsellingTime = () =>
 export const useSelectCallbackTime = () =>
     useChatStore((state) => state.selectCallbackTime);
 
+export const useOpenInfoSheet = () =>
+    useChatStore((s) => s.openInfoSheet);
+
+export const useInfoSheetOpen = () =>
+    useChatStore((s) => s.conversation.isInfoSheetOpen);
+
+export const useInfoSheetSection = () =>
+    useChatStore((s) => s.conversation.infoSheetSection);
+
+export const useCloseInfoSheet = () =>
+    useChatStore((s) => s.closeInfoSheet);
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { JOURNEY_STEPS } from "@/constants/data";
-import { usePhase } from "@/app/stores/chat.selectors";
+import { useOpenInfoSheet, usePhase } from "@/app/stores/chat.selectors";
 
 function getActiveJourneyId(phase: string) {
     if (phase === "completed") return "applications";
@@ -17,6 +17,7 @@ export function MobileTopBar() {
     const activeIndex = JOURNEY_STEPS.findIndex(
         (step) => step.id === activeId
     );
+    const openInfoSheet = useOpenInfoSheet();
 
     return (
         <div className="border-b border-[#E8E2D8] bg-[#FAF8F5] py-3 md:hidden">
@@ -28,6 +29,7 @@ export function MobileTopBar() {
                     return (
                         <div
                             key={step.id}
+                            onClick={() => openInfoSheet(step.id as "profile" | "recommendations" | "fees")}
                             className="relative flex flex-1 justify-center"
                         >
                             {/* connector */}

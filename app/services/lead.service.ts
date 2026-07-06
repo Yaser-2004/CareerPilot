@@ -1,4 +1,54 @@
+import axios from "axios";
+
 import { StudentProfile } from "@/app/types/profile";
+
+const BASE_URL =
+    "https://admin.learningshala.com/data/api/cms/student-leads";
+
+export async function updateLead(
+    crmLeadId: string,
+    updates: Partial<StudentProfile>
+) {
+    try {
+        console.log("====================================");
+        console.log("Updating Lead");
+        console.log("Lead ID:", crmLeadId);
+        console.log("Payload:", updates);
+        console.log("====================================");
+
+        const { data } = await axios.put(
+            `${BASE_URL}/${crmLeadId}`,
+            updates,
+            {
+                headers: {
+                    "X-API-Key": process.env.LEARNINGSHALA_API_KEY,
+                    Authorization: `Bearer ${process.env.LEARNINGSHALA_BEARER_TOKEN}`,
+                },
+            }
+        );
+
+        console.log("Update Success");
+        console.log(data);
+
+        return data;
+    } catch (error: any) {
+        console.error("Update Lead Failed");
+
+        console.error(
+            "Status:",
+            error.response?.status
+        );
+
+        console.error(
+            "Response:",
+            error.response?.data
+        );
+
+        console.error(error);
+
+        throw error;
+    }
+}
 
 export async function saveLead(
     profile: Partial<StudentProfile>
@@ -12,18 +62,45 @@ export async function saveLead(
     }
 
     try {
-        // TODO:
-        // Replace this with your DB/API call
+        console.log("====================================");
+        console.log("Creating Lead");
+        console.log(profile);
+        console.log("====================================");
 
-        console.log("Saving Lead------->", profile);
-
-        return crypto.randomUUID();
-
-    } catch (error) {
-        console.error(
-            "Failed to save lead",
-            error
+        const { data } = await axios.post(
+            BASE_URL,
+            profile,
+            {
+                headers: {
+                    "X-API-Key": process.env.LEARNINGSHALA_API_KEY,
+                },
+            }
         );
+
+        console.log("Lead Created Successfully");
+        console.log(data);
+
+        // Since your lead id is the id field
+        const leadId = data.data.id;
+        console.log("CRM Lead ID:", leadId);
+        return String(leadId);
+
+    } catch (error: any) {
+        console.error("Create Lead Failed");
+
+        console.error(
+            "Status:",
+            error.response?.status
+        );
+
+        console.error(
+            "Response:",
+            error.response?.data
+        );
+
+        console.error(error);
+
+        throw error;
     }
 }
 
@@ -32,62 +109,37 @@ export async function updateCounsellingSlot(
     date: string,
     time: string
 ) {
-    console.log(
-        "Updating CRM",
-        crmLeadId,
-        date,
-        time
-    );
-
-    // later:
-    // PATCH /crm/leads/:crmLeadId
+    return updateLead(crmLeadId, {
+        videoCounsellingSlot: {
+            date,
+            time,
+        },
+    });
 }
 
 export async function updateAdmissionExpertRequest(
     leadId: string,
     requested: boolean
 ) {
-    console.log({
-        leadId,
+    return updateLead(leadId, {
         admissionExpertRequested: requested,
     });
-
-    // PATCH CRM
 }
 
 export async function updateCallbackRequest(
     leadId: string,
     preferredTime: string
 ) {
-    console.log("Callback Requested");
-
-    console.log({
-        leadId,
-        preferredTime,
+    return updateLead(leadId, {
+        preferredCallbackTime: preferredTime,
     });
-
-    // Later
-    // PATCH CRM
 }
 
 export async function updateChosenProgramme(
     leadId: string,
     programme: string
 ) {
-    try {
-        console.log(
-            "Updating programme:",
-            leadId,
-            programme
-        );
-
-        // TODO:
-        // PATCH /crm/leads/:leadId
-        // {
-        //    chosenProgramme: programme
-        // }
-
-    } catch (error) {
-        console.error(error);
-    }
+    return updateLead(leadId, {
+        chosenProgramme: programme,
+    });
 }
