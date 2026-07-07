@@ -87,7 +87,6 @@ const BUZZ_WORDS = [
     "shut up",
     "vacancy",
     "hiring",
-    "salary",
     "resume",
     "cv",
     "internship",
