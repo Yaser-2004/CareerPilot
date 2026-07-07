@@ -48,21 +48,23 @@ export async function recommendProgrammes(
             eligibleProgrammes = programmes.filter(
                 p =>
                     p.fees.total >= 100000 &&
-                    p.fees.total <= 150000
+                    p.fees.total <= 180000
             );
             break;
 
         case "₹1.5-2L":
             eligibleProgrammes = programmes.filter(
                 p =>
-                    p.fees.total > 150000 &&
-                    p.fees.total <= 200000
+                    p.fees.total > 140000 &&
+                    p.fees.total <= 210000
             );
             break;
 
         case "Above ₹2L":
             eligibleProgrammes = programmes.filter(
-                p => p.fees.total > 200000
+                p =>
+                    p.fees.total >= 180000 &&
+                    p.fees.total > 200000
             );
             break;
 

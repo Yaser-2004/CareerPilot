@@ -35,7 +35,8 @@ export interface FlowOption {
 export interface FlowNode {
     step: FlowStep;
 
-    message: string;
+    message?: string;
+    messages?: string[];
 
     inputType: InputType;
 
@@ -55,7 +56,7 @@ export interface FlowNode {
 }
 
 export interface FlowResult {
-    reply: string;
+    replies: string[];
 
     nextStep: FlowStep;
 

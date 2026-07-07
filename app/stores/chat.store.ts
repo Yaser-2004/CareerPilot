@@ -98,7 +98,7 @@ interface ChatStore {
 }
 
 interface ChatApiResponse {
-    reply: string;
+    replies: string[];
 
     profileUpdates: Record<string, any>;
 
@@ -205,14 +205,37 @@ async function showCurrentFlowStep(
 ) {
     const node = MBA_FLOW[conversation.phase];
 
-    await typeReply(
-        interpolate(
-            node.message,
-            conversation.profile
-        ),
-        assistantId,
-        set
-    );
+    const replies = node.messages
+        ? node.messages
+        : [node.message!];
+
+    for (const reply of replies) {
+
+        const id = crypto.randomUUID();
+
+        set((state: ChatStore) => ({
+            conversation: {
+                ...state.conversation,
+                messages: [
+                    ...state.conversation.messages,
+                    {
+                        id,
+                        role: "assistant",
+                        content: "",
+                        timestamp: Date.now(),
+                    },
+                ],
+            },
+        }));
+
+        await typeReply(
+            interpolate(reply, conversation.profile),
+            id,
+            set
+        );
+
+        await sleep(350);
+    }
 
     set((state: ChatStore) => ({
         conversation: {
@@ -263,11 +286,12 @@ export const useChatStore = create<ChatStore>(
             await sleep(600);
 
             await typeReply(
-                `👋 Welcome to the Online MBA Admission Assistant.
+                `👋 Hi! Welcome to your Online MBA Admission Assistant.
 
-I'll help you find the most suitable Online MBA based on your profile.
+I'll help you discover the best MBA programs based on your education, career goals, and budget.
 
-It takes about 2 minutes.`,
+It takes less than 2 minutes to get your personalized recommendations. 🚀
+`,
                 firstId,
                 set
             );
@@ -294,8 +318,8 @@ It takes about 2 minutes.`,
             await sleep(300);
 
             await typeReply(
-                `Let's begin.
-Before we start, what should I call you?`,
+                `Let's get started! 😊
+What name should I use for your personalized recommendations?`,
                 secondId,
                 set
             );
@@ -538,11 +562,34 @@ Before we start, what should I call you?`,
 
                     await sleep(700);
 
-                    await typeReply(
-                        data.reply,
-                        assistantId,
-                        set
-                    );
+                    const replies = data.replies;
+
+                    for (let i = 0; i < replies.length; i++) {
+                        if (i > 0) {
+                            const newAssistantId = crypto.randomUUID();
+
+                            set((state) => ({
+                                conversation: {
+                                    ...state.conversation,
+                                    messages: [
+                                        ...state.conversation.messages,
+                                        {
+                                            id: newAssistantId,
+                                            role: "assistant",
+                                            content: "",
+                                            timestamp: Date.now(),
+                                        },
+                                    ],
+                                },
+                            }));
+
+                            await sleep(300);
+
+                            await typeReply(replies[i], newAssistantId, set);
+                        } else {
+                            await typeReply(replies[i], assistantId, set);
+                        }
+                    }
 
                     set((state) => {
                         const updatedProfile = {

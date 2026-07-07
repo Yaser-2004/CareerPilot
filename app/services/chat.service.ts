@@ -13,7 +13,7 @@ import { RouterResponse } from "./router.service";
 import { StudentProfile } from "../types/profile";
 
 interface HandleChatResult {
-    reply: string;
+    replies: string[];
 
     profileUpdates: Record<string, any>;
 
@@ -94,8 +94,9 @@ export async function handleChat(
             );
 
             return {
-                reply:
+                replies: [
                     "Excellent choice! Here's the complete fee structure for your selected programme.",
+                ],
 
                 profileUpdates,
 
@@ -157,7 +158,7 @@ export async function handleChat(
     // }
 
     return {
-        reply: flow.reply,
+        replies: flow.replies,
 
         profileUpdates: flow.profileUpdates,
 

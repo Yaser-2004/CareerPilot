@@ -67,7 +67,7 @@ export async function handleFlowStep({
 
     if (validationError) {
         return {
-            reply: validationError,
+            replies: [validationError],
 
             nextStep: currentStep,
 
@@ -103,7 +103,7 @@ export async function handleFlowStep({
     // Recommendation screen handled later
     if (!nextNode) {
         return {
-            reply: "",
+            replies: [],
 
             nextStep,
 
@@ -128,11 +128,12 @@ export async function handleFlowStep({
         suggestions = nextNode.options ?? [];
     }
 
+    const replies = (nextNode.messages ?? [nextNode.message!]).map(msg =>
+        interpolate(msg, updatedProfile)
+    );
+
     return {
-        reply: interpolate(
-            nextNode.message,
-            updatedProfile
-        ),
+        replies,
 
         nextStep,
 

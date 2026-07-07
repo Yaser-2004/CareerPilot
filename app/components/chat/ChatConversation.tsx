@@ -210,7 +210,7 @@ export function ChatConversation() {
 
                                 {/* Recommendation Cards */}
 
-                                {message.content.includes("shortlisted the best Online MBA programmes") &&
+                                {message.content.includes("handpicked the best Online MBA programs for you") &&
                                     recommendations.length > 0 && (
                                         <div className="mt-5 space-y-4 grid grid-cols-1 md:grid-cols-2 gap-4 space-x-4">
                                             {recommendations.map(
@@ -381,12 +381,12 @@ function MessageBubble({ message }: { message: ChatMessage }) {
                     </p>
 
                     {message.role === "assistant" &&
-                        message.content.includes("What's your WhatsApp number?") && (
+                        message.content.includes("Please enter your WhatsApp number.") && (
                             <ContactInfoCard type="phone" />
                         )}
 
                     {message.role === "assistant" &&
-                        message.content.includes("What's your email address?") && (
+                        message.content.includes("Enter your email address below.") && (
                             <ContactInfoCard type="email" />
                         )}
                 </div>

@@ -73,6 +73,46 @@ Example:
 }
 `;
 
+const BUZZ_WORDS = [
+    "fake",
+    "scam",
+    "fraud",
+    "cheat",
+    "fake university",
+    "spam",
+    "worst",
+    "useless",
+    "idiot",
+    "stupid",
+    "shut up",
+    "job",
+    "vacancy",
+    "hiring",
+    "career",
+    "salary",
+    "resume",
+    "cv",
+    "internship",
+    "placement",
+    "work from home",
+    "hmm",
+    "xyz",
+    "123",
+    "location",
+    "address",
+    "Office",
+    "cake",
+    "pizza",
+    "hello",
+    "abc",
+    "xyz",
+    "123",
+    "nothing",
+    "asdf",
+    "test",
+    "hahaha",
+]
+
 export async function detectIntent(
     message: string,
     currentStep: FlowStep,
@@ -83,6 +123,12 @@ export async function detectIntent(
     const text = message.trim();
 
     const node = MBA_FLOW[currentStep];
+
+    if (BUZZ_WORDS.some(word => text.toLowerCase().includes(word))) {
+        return {
+            intent: "unknown",
+        };
+    }
 
     if (/\b(hi|hello|hey)\b/i.test(text)) {
         return {

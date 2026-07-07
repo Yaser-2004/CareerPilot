@@ -86,10 +86,17 @@ export async function POST(req: NextRequest) {
 
     // ---------- Greeting -----------
     if (intent.intent === "greeting") {
+        const replies = [
+            "Hello! I am here to help you with the admission process. So,",
+            ...(MBA_FLOW[currentStep].messages ?? [MBA_FLOW[currentStep].message!]).map(msg =>
+                interpolate(msg, conversation.profile)
+            ),
+        ];
+
         return Response.json({
             faq: false,
 
-            reply: `Hello! I am here to help you with the admission process. So, ${MBA_FLOW[currentStep].message}`,
+            replies,
 
             profileUpdates: {},
 
@@ -112,14 +119,17 @@ export async function POST(req: NextRequest) {
     // ---------- Small Talk ----------
 
     if (intent.intent === "smalltalk") {
+        const replies = [
+            "😊 Sure! Let's continue with your admission process.",
+            ...(MBA_FLOW[currentStep].messages ?? [MBA_FLOW[currentStep].message!]).map(msg =>
+                interpolate(msg, conversation.profile)
+            ),
+        ];
+
         return Response.json({
             faq: false,
 
-            reply:
-                `😊 Sure! Let's continue with your admission process. \n\n${interpolate(
-                    MBA_FLOW[currentStep].message,
-                    conversation.profile
-                )}`,
+            replies,
 
             profileUpdates: {},
 
@@ -149,8 +159,11 @@ export async function POST(req: NextRequest) {
         const stream = new ReadableStream({
             async start(controller) {
 
-                const currentQuestion =
-                    MBA_FLOW[currentStep].message;
+                const node = MBA_FLOW[currentStep];
+
+                const currentQuestion = (
+                    node.messages ?? [node.message!]
+                ).join("\n\n");
 
                 const response = await streamFaqResponse(
                     message,
@@ -203,14 +216,20 @@ export async function POST(req: NextRequest) {
     }
 
     if (intent.intent === "unknown") {
+
+        const node = MBA_FLOW[currentStep];
+
+        const replies = [
+            "😊 Let's not deviate from the topic. Let's continue with your admission process.",
+            ...(node.messages ?? [node.message!]).map(msg =>
+                interpolate(msg, conversation.profile)
+            ),
+        ];
+
         return Response.json({
             faq: false,
 
-            reply:
-                `😊 Lets not deviate from the topic, lets continue with your admission process. \n\n${interpolate(
-                    MBA_FLOW[currentStep].message,
-                    conversation.profile
-                )}`,
+            replies,
 
             profileUpdates: {},
 

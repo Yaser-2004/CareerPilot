@@ -16,10 +16,10 @@ export const MBA_FLOW: Record<string, FlowNode> = {
     qualification: {
         step: "qualification",
 
-        message: `Nice to meet you, {{name}} 👋
+        message: `Great to meet you, {{name}} 👋
 
-Let's understand your profile first. I'll personalize your recommendations.
-What's your highest qualification?`,
+Let's understand your profile better.
+What is the highest qualification you've completed? 🎓`,
 
         inputType: "chips",
 
@@ -74,7 +74,8 @@ What's your highest qualification?`,
     specialization: {
         step: "specialization",
 
-        message: `Which specialization did you complete?`,
+        messages: [`Great choice! A {{qualification}} background opens up several MBA opportunities. 📈`, `Now tell us about your academic background. Which specialization did you complete?
+`],
 
         inputType: "chips",
 
@@ -88,7 +89,8 @@ What's your highest qualification?`,
     goal: {
         step: "goal",
 
-        message: `Why are you planning an Online MBA?`,
+        messages: [`Nice! {{specialization}} is one of the most preferred backgrounds for MBA aspirants.`, `Now, let's understand your career goal.
+What's inspiring you to pursue an Online MBA?`],
 
         inputType: "chips",
 
@@ -138,9 +140,15 @@ What's your highest qualification?`,
     phone: {
         step: "phone",
 
-        message: `Great, {{name}}! I'll save your progress so you don't lose your recommendations.
+        messages: [
+            `Perfect, {{name}}! That's a great goal. I'll use this to shortlist programmes that can help you move closer to your career objective.`,
 
-What's your WhatsApp number?`,
+            `You're almost done. 🎉
+
+I'll save your progress so you don't lose your recommendations.
+
+Please enter your WhatsApp number.`,
+        ],
 
         inputType: "phone",
 
@@ -158,7 +166,11 @@ What's your WhatsApp number?`,
     experience: {
         step: "experience",
 
-        message: `Do you have any work experience?`,
+        message: `Awesome! {{name}} Your profile is taking shape.
+
+Now let's understand your professional experience to find MBA programs that match your career stage.
+How much work experience do you have?
+`,
 
         inputType: "chips",
 
@@ -198,7 +210,9 @@ What's your WhatsApp number?`,
     budget: {
         step: "budget",
 
-        message: `What is your Estimated Budget?`,
+        message: `I'm matching programs based on your profile, career goal, and investment range.
+What budget range are you comfortable with for your Online MBA?
+`,
 
         inputType: "chips",
 
@@ -238,9 +252,11 @@ What's your WhatsApp number?`,
     email: {
         step: "email",
 
-        message: `One last detail before I prepare your recommendations.
+        message: `One last step!
+Where should we send your personalized recommendations?
 
-What's your email address?`,
+Enter your email address below.
+`,
 
         inputType: "email",
 
@@ -257,8 +273,9 @@ What's your email address?`,
 
     recommendations: {
         step: "recommendations",
-        message:
-            "Based on your profile, I've shortlisted the best Online MBA programmes for you.\nChoose the one you'd like to explore further.",
+        message: `Great news! 🎉 Based on your profile, we've handpicked the best Online MBA programs for you.
+
+Choose the one you'd like to explore further.`,
 
         inputType: "chips",
 
