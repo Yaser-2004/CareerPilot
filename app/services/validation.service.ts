@@ -147,6 +147,10 @@ export function validatePhone(phone: string) {
     if (!value)
         return "Phone number is required.";
 
+    if (value.length !== 10) {
+        return "Enter a valid 10-digit Indian mobile number.";
+    }
+
     if (!/^[6-9]\d{9}$/.test(value)) {
         return "Enter a valid Indian mobile number.";
     }
