@@ -80,7 +80,8 @@ export async function POST(req: NextRequest) {
     const intent = await detectIntent(
         message,
         currentStep,
-        conversation.profile
+        conversation.profile,
+        conversation.recommendations
     );
 
     // ---------- Greeting -----------

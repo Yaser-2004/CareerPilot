@@ -11,6 +11,7 @@ import { resolveOption } from "./optionResolver.service";
 import { QUALIFICATION_SPECIALIZATIONS } from "@/app/data/qualificationSpecializations";
 import { Conversation } from "openai/resources/conversations.js";
 import { StudentProfile } from "../types/profile";
+import { Programme } from "../types/programme";
 
 export type Intent =
     | "flow"
@@ -75,7 +76,8 @@ Example:
 export async function detectIntent(
     message: string,
     currentStep: FlowStep,
-    profile: StudentProfile
+    profile: StudentProfile,
+    recommendations: Programme[]
 ): Promise<RouterResponse> {
 
     const text = message.trim();
@@ -116,9 +118,22 @@ export async function detectIntent(
     }
 
     if (currentStep === "recommendations") {
+        const matched = recommendations.find(
+            p =>
+                p.id === text ||
+                p.university.toLowerCase() === text.toLowerCase() ||
+                p.programmeName.toLowerCase() === text.toLowerCase()
+        );
+
+        if (matched) {
+            return {
+                intent: "flow",
+                normalizedValue: matched.id,
+            };
+        }
+
         return {
-            intent: "flow",
-            normalizedValue: text,
+            intent: "faq",
         };
     }
 

@@ -40,23 +40,32 @@ export async function recommendProgrammes(
     switch (profile.budget) {
         case "Below ₹1L":
             eligibleProgrammes = programmes.filter(
-                p => p.fees.total <= 100000
+                p => p.fees.total < 100000
             );
             break;
 
         case "₹1-1.5L":
             eligibleProgrammes = programmes.filter(
-                p => p.fees.total <= 150000
+                p =>
+                    p.fees.total >= 100000 &&
+                    p.fees.total <= 150000
             );
             break;
 
         case "₹1.5-2L":
             eligibleProgrammes = programmes.filter(
-                p => p.fees.total <= 200000
+                p =>
+                    p.fees.total > 150000 &&
+                    p.fees.total <= 200000
             );
             break;
 
         case "Above ₹2L":
+            eligibleProgrammes = programmes.filter(
+                p => p.fees.total > 200000
+            );
+            break;
+
         case "Need EMI":
         default:
             eligibleProgrammes = programmes;
