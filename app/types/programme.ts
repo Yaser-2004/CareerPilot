@@ -8,6 +8,18 @@ export interface Fees {
     emiPerMonth?: number;
 
     currency: "INR";
+
+    paymentOptions?: string[];
+
+    emiAvailable?: boolean;
+
+    hasScholarships?: boolean;
+
+    scholarshipEligibility?: string;
+
+    inclusions?: string[];
+
+    paymentModes?: string[];
 }
 
 export interface Eligibility {
@@ -15,7 +27,29 @@ export interface Eligibility {
 
     minimumPercentage?: number;
 
+    preferredMarks?: string;
+
+    entranceRequired?: boolean;
+
     experienceRequired: boolean;
+}
+
+export interface Curriculum {
+    durationSemesters: number;
+
+    coreSubjects: string[];
+}
+
+export interface Placements {
+    services: string[];
+
+    typicalRecruiters: string[];
+}
+
+export interface AdmissionProcess {
+    steps: string[];
+
+    cycles: string;
 }
 
 export interface Programme {
@@ -34,6 +68,8 @@ export interface Programme {
 
     naacGrade?: string;
 
+    approvals?: string[];
+
     // Fees
     fees: Fees;
 
@@ -41,6 +77,8 @@ export interface Programme {
     eligibility: Eligibility;
 
     // Academics
+    curriculum?: Curriculum;
+
     specializations: string[];
 
     // Recommendation Engine
@@ -52,6 +90,13 @@ export interface Programme {
     careerOutcomes: string[];
 
     placementSupport: boolean;
+
+    placements?: Placements;
+
+    // Documents & Process
+    requiredDocuments?: string[];
+
+    admissionProcess?: AdmissionProcess;
 
     // Links
     programmeUrl: string;

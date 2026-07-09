@@ -1,5 +1,7 @@
 import { groq, CHAT_MODEL } from "@/lib/groq";
 import { FlowStep } from "@/app/types/conversation";
+import { Programme } from "@/app/types/programme";
+import { programmes } from "@/constants/programmes";
 
 const SYSTEM_PROMPT = `
 You are CareerPilot AI.
@@ -51,7 +53,28 @@ export async function streamFaqResponse(
     currentStep: FlowStep,
     currentQuestion: string,
     summary: string,
+    recommendations: Programme[],
+    programmeData?: Record<string, any>
 ) {
+    let contextAddition = "";
+    if (programmeData) {
+        contextAddition = `
+Target Programme Data:
+${JSON.stringify(programmeData, null, 2)}
+
+IMPORTANT RULE: Answer ONLY based on the 'Target Programme Data' provided above.
+`;
+    } else {
+        const available = recommendations.length > 0 ? recommendations : programmes;
+        const recommendedTiers = available.map((r: Programme) => `${r.university} (${r.programmeName})`).join(", ") || "None available yet.";
+        contextAddition = `
+Available Programmes:
+${recommendedTiers}
+
+IMPORTANT RULE: You MUST limit your suggestions and answers strictly to the available programmes listed above, current step, and profile context. If the user asks for a recommendation, only suggest from the 'Available Programmes'.
+`;
+    }
+
     return groq.chat.completions.create({
         model: CHAT_MODEL,
 
@@ -70,6 +93,7 @@ export async function streamFaqResponse(
 Student Context:
 
 ${summary}
+${contextAddition}
         `,
             },
             {

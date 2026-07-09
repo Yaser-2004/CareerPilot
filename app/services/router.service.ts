@@ -17,6 +17,7 @@ export type Intent =
     | "flow"
     | "faq"
     | "programme"
+    | "programme_data"
     | "greeting"
     | "restart"
     | "smalltalk"
@@ -73,7 +74,7 @@ Example:
 }
 `;
 
-const BUZZ_WORDS = [
+const UNKNOWN_WORDS = [
     "fake",
     "scam",
     "fraud",
@@ -85,6 +86,19 @@ const BUZZ_WORDS = [
     "idiot",
     "stupid",
     "shut up",
+    "hmm",
+    "xyz",
+    "123",
+    "cake",
+    "pizza",
+    "abc",
+    "nothing",
+    "asdf",
+    "test",
+    "hahaha",
+];
+
+const FAQ_WORDS = [
     "vacancy",
     "hiring",
     "resume",
@@ -92,23 +106,43 @@ const BUZZ_WORDS = [
     "internship",
     "placement",
     "work from home",
-    "hmm",
-    "xyz",
-    "123",
     "location",
     "address",
-    "Office",
-    "cake",
-    "pizza",
-    "hello",
-    "abc",
-    "xyz",
-    "123",
-    "nothing",
-    "asdf",
-    "test",
-    "hahaha",
-]
+    "office",
+    "fee",
+    "fees",
+    "cost",
+    "price",
+    "eligibility",
+    "package",
+    "admission",
+    "admissions",
+    "duration",
+    "semester",
+    "exam",
+    "university",
+    "college",
+    "approval",
+    "ugc",
+    "aicte",
+    "naac",
+    "emi",
+    "loan",
+    "scholarship",
+    "attendance",
+    "online mba",
+    "hostel",
+    "ranking",
+    "job",
+    "curriculum",
+    "syllabus",
+    "assignment",
+    "project",
+    "elective",
+    "specialization",
+    "recognition",
+    "accreditation",
+];
 
 export async function detectIntent(
     message: string,
@@ -121,9 +155,23 @@ export async function detectIntent(
 
     const node = MBA_FLOW[currentStep];
 
-    if (BUZZ_WORDS.some(word => text.toLowerCase().includes(word))) {
+    if (UNKNOWN_WORDS.some(word => text.toLowerCase().includes(word))) {
         return {
             intent: "unknown",
+        };
+    }
+
+    if (FAQ_WORDS.some(word => text.toLowerCase().includes(word)) || text.includes("?")) {
+        const lowerText = text.toLowerCase();
+        const hasUniversityContext = lowerText.includes("lpu") || lowerText.includes("manipal") || lowerText.includes("amity") || lowerText.includes("uttaranchal") || /\buu\b/.test(lowerText);
+
+        if (profile.chosenProgrammeId || hasUniversityContext) {
+            return {
+                intent: "programme_data",
+            };
+        }
+        return {
+            intent: "faq",
         };
     }
 
@@ -204,49 +252,7 @@ export async function detectIntent(
 
     const lower = text.toLowerCase();
 
-    const faqKeywords = [
-        "fee",
-        "fees",
-        "cost",
-        "price",
-        "eligibility",
-        "placement",
-        "package",
-        "admission",
-        "admissions",
-        "duration",
-        "semester",
-        "exam",
-        "university",
-        "college",
-        "approval",
-        "ugc",
-        "aicte",
-        "naac",
-        "emi",
-        "loan",
-        "scholarship",
-        "attendance",
-        "online mba",
-        "hostel",
-        "ranking",
-        "job",
-        "internship",
-        "curriculum",
-        "syllabus",
-        "assignment",
-        "project",
-        "elective",
-        "specialization",
-        "recognition",
-        "accreditation",
-    ];
 
-    if (faqKeywords.some(word => lower.includes(word))) {
-        return {
-            intent: "faq",
-        };
-    }
 
     const result =
         await groqJSON(`

@@ -53,7 +53,7 @@ export function ChatSidebar() {
                     </div>
                     <ol className="relative space-y-5">
                         {/* Custom background timeline track line */}
-                        <div className="absolute left-[11px] top-3 bottom-3 w-[2px] bg-[#EEF2F6]">
+                        <div className="absolute left-[19px] top-3 bottom-0 w-[2px] bg-[#EEF2F6]">
                             <motion.div
                                 className="w-full bg-[#E2374D] origin-top"
                                 initial={false}
@@ -84,13 +84,21 @@ export function ChatSidebar() {
 
                                     <button className="group flex w-full items-start gap-4 text-left transition-opacity hover:opacity-90">
                                         {/* Dynamic Indicator Dot Tracker matching image */}
-                                        <div className="relative z-20 flex h-6 w-6 shrink-0 items-center justify-center transition-all">
+                                        <div className="relative z-20 flex h-10 w-10 shrink-0 items-center justify-center transition-all">
                                             {active ? (
-                                                <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-50">
-                                                    <div className="h-3 w-3 rounded-full bg-[#E2374D]" />
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
+                                                    <div className="flex items-center justify-center text-white text-[10px] h-8 w-8 rounded-full bg-[#E2374D]" >
+                                                        {/* percentage according to step */}
+                                                        {(i + 1) * 100 / JOURNEY_STEPS.length}%
+                                                    </div>
                                                 </div>
                                             ) : done ? (
-                                                <div className="h-3 w-3 rounded-full bg-[#E2374D]" />
+                                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-red-50">
+                                                    <div className="flex items-center justify-center text-white text-[10px] h-8 w-8 rounded-full bg-[#E2374D]" >
+                                                        {/* percentage according to step */}
+                                                        {i * 100 / JOURNEY_STEPS.length}%
+                                                    </div>
+                                                </div>
                                             ) : (
                                                 <div className="h-3 w-3 rounded-full bg-[#E2E8F0]" />
                                             )}

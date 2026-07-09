@@ -30,7 +30,7 @@ export function getFeeBreakdown(
 
         totalFee,
 
-        emiAvailable: true,
+        emiAvailable: programme.fees.emiAvailable ?? true,
 
         emiPerMonth: programme.fees.emiPerMonth,
 

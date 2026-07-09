@@ -55,7 +55,9 @@ export default function ProgrammeCard({
                 <div className="flex-1 mt-4 space-y-1 text-sm text-slate-600 bg-blue-50 p-2 rounded-lg border border-blue-200">
                     {/* display program specializations here*/}
                     <p className="text-[12px] font-medium py-1">Specializations</p>
-                    {programme.specializations.map((specialization, i) => (
+
+                    {/* only upto 6 specializations */}
+                    {programme.specializations.slice(0, 6).map((specialization, i) => (
                         <p key={i} className="text-[10px] py-[3px]">· {specialization}</p>
                     ))}
                 </div>

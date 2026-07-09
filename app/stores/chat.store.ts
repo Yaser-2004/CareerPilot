@@ -209,9 +209,14 @@ async function showCurrentFlowStep(
         ? node.messages
         : [node.message!];
 
-    for (const reply of replies) {
+    await typeReply("Let's get back to the process.", assistantId, set);
+    await sleep(350);
 
+    let lastId = assistantId;
+
+    for (const reply of replies) {
         const id = crypto.randomUUID();
+        lastId = id;
 
         set((state: ChatStore) => ({
             conversation: {
@@ -241,7 +246,7 @@ async function showCurrentFlowStep(
         conversation: {
             ...state.conversation,
             messages: state.conversation.messages.map((msg) =>
-                msg.id === assistantId
+                msg.id === lastId
                     ? {
                         ...msg,
                         suggestions: getSuggestionsForStep(

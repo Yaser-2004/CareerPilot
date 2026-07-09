@@ -15,6 +15,8 @@ export interface StudentProfile {
 
     chosenProgramme?: string;
 
+    chosenProgrammeId?: string;
+
     experience?: string;
 
     goal?: string;

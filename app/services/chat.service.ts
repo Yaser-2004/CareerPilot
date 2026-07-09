@@ -74,6 +74,7 @@ export async function handleChat(
 
             const profileUpdates: Partial<StudentProfile> = {
                 chosenProgramme: selected.programme.university,
+                chosenProgrammeId: selected.programme.id,
             };
 
             const updatedProfile = {

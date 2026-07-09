@@ -10,6 +10,7 @@ import { FlowStep } from "@/app/types/conversation";
 import { getSuggestionsForStep } from "./chatHelpers";
 import { interpolate } from "@/app/services/flow.service";
 import { buildSummary } from "@/app/services/summary.service";
+import { getProgrammeData } from "@/app/services/programmeQuery.service";
 
 export const runtime = "nodejs";
 
@@ -37,6 +38,7 @@ export async function POST(req: NextRequest) {
                         currentStep,
                         "",
                         conversation.summary,
+                        conversation.recommendations,
                     );
 
                 for await (const chunk of response) {
@@ -151,9 +153,9 @@ export async function POST(req: NextRequest) {
         });
     }
 
-    // ---------------- FAQ ----------------
+    // ---------------- FAQ / PROGRAMME DATA ----------------
 
-    if (intent.intent === "faq") {
+    if (intent.intent === "faq" || intent.intent === "programme_data") {
         const encoder = new TextEncoder();
 
         const stream = new ReadableStream({
@@ -165,11 +167,18 @@ export async function POST(req: NextRequest) {
                     node.messages ?? [node.message!]
                 ).join("\n\n");
 
+                let programmeData = undefined;
+                if (intent.intent === "programme_data") {
+                    programmeData = getProgrammeData(message, conversation.profile.chosenProgrammeId) || undefined;
+                }
+
                 const response = await streamFaqResponse(
                     message,
                     currentStep,
                     currentQuestion,
                     conversation.summary,
+                    conversation.recommendations,
+                    programmeData
                 );
 
                 for await (const chunk of response) {
