@@ -56,24 +56,67 @@ export async function streamFaqResponse(
     recommendations: Programme[],
     programmeData?: Record<string, any>
 ) {
-    let contextAddition = "";
+
+    const available =
+        recommendations.length > 0
+            ? recommendations
+            : programmes;
+
+
+    const comparisonData = available.map((p) => ({
+        university: p.university,
+        programmeName: p.programmeName,
+
+        fees: {
+            total: p.fees.total,
+            feesRange: p.fees.feesRange,
+            emiPerMonth: p.fees.emiPerMonth,
+            emiAvailable: p.fees.emiAvailable,
+            paymentOptions: p.fees.paymentOptions,
+            scholarships: p.fees.hasScholarships,
+        },
+
+        duration: p.duration,
+
+        naacGrade: p.naacGrade,
+
+        approvals: p.approvals,
+
+        specializations: p.specializations,
+
+        placementSupport: p.placementSupport,
+
+        careerOutcomes: p.careerOutcomes,
+
+        placements: p.placements?.typicalRecruiters,
+    }));
+
+
+    let contextAddition = `
+
+Programme Comparison Data:
+
+${JSON.stringify(comparisonData, null, 2)}
+
+`;
+
+
     if (programmeData) {
-        contextAddition = `
-Target Programme Data:
+
+        contextAddition += `
+
+Selected Programme (Give priority to this):
+
 ${JSON.stringify(programmeData, null, 2)}
 
-IMPORTANT RULE: Answer ONLY based on the 'Target Programme Data' provided above.
-`;
-    } else {
-        const available = recommendations.length > 0 ? recommendations : programmes;
-        const recommendedTiers = available.map((r: Programme) => `${r.university} (${r.programmeName})`).join(", ") || "None available yet.";
-        contextAddition = `
-Available Programmes:
-${recommendedTiers}
+IMPORTANT:
+The student has selected this programme.
+Answer from this programme first.
+Use comparison data only when the question requires comparison.
 
-IMPORTANT RULE: You MUST limit your suggestions and answers strictly to the available programmes listed above, current step, and profile context. If the user asks for a recommendation, only suggest from the 'Available Programmes'.
 `;
     }
+
 
     return groq.chat.completions.create({
         model: CHAT_MODEL,
@@ -87,22 +130,28 @@ IMPORTANT RULE: You MUST limit your suggestions and answers strictly to the avai
                 role: "system",
                 content: SYSTEM_PROMPT,
             },
+
             {
                 role: "system",
                 content: `
 Student Context:
 
 ${summary}
+
+
 ${contextAddition}
-        `,
+`,
             },
+
             {
                 role: "system",
                 content: `
 Current Question:
+
 ${currentQuestion}
-        `,
+`,
             },
+
             {
                 role: "user",
                 content: question,

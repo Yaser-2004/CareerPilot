@@ -30,6 +30,7 @@ import {
     useInputLocked,
     useSelectCounsellingDate,
     useConversation,
+    useIsCompleted,
 } from "@/app/stores/chat.selectors";
 import { getJourneyProgress } from "./ChatSidebar";
 
@@ -62,6 +63,7 @@ export function ChatConversation() {
     const selectDate = useSelectCounsellingDate();
     const [showNextActions, setShowNextActions] = useState(false);
     const openInfoSheet = useOpenInfoSheet();
+    const isCompleted = useIsCompleted();
 
     const scrollRef = useRef<HTMLDivElement>(null);
     const node = MBA_FLOW[currentStep] ?? {
@@ -142,17 +144,10 @@ export function ChatConversation() {
             case "callback_slots":
                 return <CallbackTimePicker />;
 
-            case "ask_another_question":
-                return <AskAnotherQuestionCard />;
-
             default:
                 return null;
         }
     }
-
-    const uiOnlyTypes = [
-        "ask_another_question",
-    ];
 
     return (
         <section className="flex w-full md:w-2/3 flex-col bg-[#FAFBFC] h-full min-h-0 overflow-hidden">
@@ -204,10 +199,7 @@ export function ChatConversation() {
                     <AnimatePresence initial={false}>
                         {messages.map((message, index) => (
                             <div key={message.id}>
-                                {!message.type || !uiOnlyTypes.includes(message.type) ? (
-                                    <MessageBubble message={message} />
-                                ) : null}
-
+                                <MessageBubble message={message} />
                                 {/* Recommendation Cards */}
 
                                 {message.content.includes("handpicked the best Online MBA programs for you") &&
@@ -247,6 +239,10 @@ export function ChatConversation() {
                         {feeBreakdown && showNextActions &&
                             <NextActionsCard />
                         } */}
+
+                        {isCompleted && conversation.chatMode === "faq" && (
+                            <AskAnotherQuestionCard />
+                        )}
 
                         {(isTyping &&
                             <TypingIndicator key="typing" />

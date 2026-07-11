@@ -3,6 +3,8 @@ export interface Fees {
 
     total: number;
 
+    feesRange: string;
+
     perSemester?: number;
 
     emiPerMonth?: number;

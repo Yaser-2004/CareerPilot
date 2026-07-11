@@ -17,6 +17,19 @@ export function parseProfileUpdate(
             return parseQualification(text);
 
         case "specialization":
+            if (
+                [
+                    "none",
+                    "no specialization",
+                    "no specialisation",
+                    "n/a",
+                    "na"
+                ].includes(text.toLowerCase())
+            ) {
+                return {
+                    specialization: "None"
+                };
+            }
             return {
                 specialization: text,
             };

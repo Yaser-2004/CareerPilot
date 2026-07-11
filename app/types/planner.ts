@@ -5,6 +5,7 @@ export type ConversationPhase =
     | "welcome"
     | "recommendations"
     | "lead_capture"
+    | "fees"
     | "completed";
 
 export type PlannerAction =

@@ -30,6 +30,8 @@ interface HandleChatResult {
     applyUrl: string | null;
 
     completed: boolean;
+
+    lockInput?: boolean;
 }
 
 function looksLikeFaq(message: string) {

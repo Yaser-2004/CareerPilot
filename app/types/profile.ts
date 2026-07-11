@@ -11,6 +11,8 @@ export interface StudentProfile {
 
     specialization?: string;
 
+    specializationMessage?: string;
+
     preferredSpecialization?: string;
 
     chosenProgramme?: string;

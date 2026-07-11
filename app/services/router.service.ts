@@ -21,7 +21,8 @@ export type Intent =
     | "greeting"
     | "restart"
     | "smalltalk"
-    | "unknown";
+    | "unknown"
+    | "conversation_end";
 
 export interface RouterResponse {
     intent: Intent;
@@ -139,7 +140,6 @@ const FAQ_WORDS = [
     "assignment",
     "project",
     "elective",
-    "specialization",
     "recognition",
     "accreditation",
 ];
@@ -152,6 +152,31 @@ export async function detectIntent(
 ): Promise<RouterResponse> {
 
     const text = message.trim();
+
+    const lower = text.toLowerCase();
+
+    const END_WORDS = [
+        "ok",
+        "okay",
+        "done",
+        "that's all",
+        "that is all",
+        "no more questions",
+        "nothing else",
+        "no thanks",
+        "thank you",
+        "thanks",
+        "bye",
+        "goodbye",
+    ];
+
+    if (
+        END_WORDS.some(word => lower.includes(word))
+    ) {
+        return {
+            intent: "conversation_end",
+        };
+    }
 
     const node = MBA_FLOW[currentStep];
 
@@ -233,13 +258,42 @@ export async function detectIntent(
         let options = node.options ?? [];
 
         if (currentStep === "specialization") {
+
+            const noSpecializationWords = [
+                "no specialization",
+                "no specialisation",
+                "none",
+                "na",
+                "n/a",
+                "not applicable",
+                "dont have",
+                "don't have",
+                "no specific specialization",
+            ];
+
+            const normalized = text
+                .toLowerCase()
+                .trim();
+
+            if (
+                noSpecializationWords.some(word =>
+                    normalized.includes(word)
+                )
+            ) {
+                return {
+                    intent: "flow",
+                    normalizedValue: "None",
+                };
+            }
+
+
             options =
                 QUALIFICATION_SPECIALIZATIONS[
                 profile.qualification ?? ""
                 ] ?? [];
         }
 
-        // Exact match
+
         const matched = matchOption(text, options);
 
         if (matched) {
@@ -249,8 +303,6 @@ export async function detectIntent(
             };
         }
     }
-
-    const lower = text.toLowerCase();
 
 
 

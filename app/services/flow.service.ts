@@ -85,7 +85,25 @@ export async function handleFlowStep({
     }
 
     // Save current answer
-    const profileUpdates = parseProfileUpdate(currentStep, message);
+    // Save current answer
+    const profileUpdates = parseProfileUpdate(
+        currentStep,
+        message
+    );
+
+    // Special handling for no specialization
+    if (
+        currentStep === "specialization" &&
+        profileUpdates.specialization === "None"
+    ) {
+        profileUpdates.specializationMessage =
+            "No problem! We'll consider your overall profile while finding suitable MBA programmes.";
+    }
+    else if (currentStep === "specialization") {
+        profileUpdates.specializationMessage =
+            `Nice! ${profileUpdates.specialization} is one of the most preferred backgrounds for MBA aspirants.`;
+    }
+
 
     const updatedProfile = {
         ...profile,

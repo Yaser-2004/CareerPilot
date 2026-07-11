@@ -27,6 +27,47 @@ export async function POST(req: NextRequest) {
     // ---------------- POST-ONBOARDING FAQ MODE ----------------
 
     if (conversation.chatMode === "faq" && !conversation.isCompleted) {
+
+        const intent = await detectIntent(
+            message,
+            "completed",
+            conversation.profile,
+            conversation.recommendations
+        );
+
+        if (intent.intent === "conversation_end") {
+
+            return Response.json({
+
+                faq: false,
+
+                replies: [
+                    "Great! 😊\n\nI'm glad I could help you with your Online MBA queries. If you need any more information about programmes, universities, fees, eligibility, or admissions in the future, feel free to reach out anytime."
+                ],
+
+                profileUpdates: {},
+
+                nextStep: "completed",
+
+                phase: "completed",
+
+                suggestions: [],
+
+                recommendations: conversation.recommendations,
+
+                feeBreakdown: conversation.feeBreakdown,
+
+                applyUrl: conversation.applyUrl,
+
+                completed: true,
+
+                lockInput: true,
+
+                showAskAnotherQuestion: false,
+            });
+        }
+
+        // existing FAQ streaming continues below...
         const encoder = new TextEncoder();
 
         const stream = new ReadableStream({
@@ -119,6 +160,44 @@ export async function POST(req: NextRequest) {
     }
 
     // ---------- Small Talk ----------
+
+    if (intent.intent === "smalltalk") {
+
+        if (
+            conversation.phase === "fees" ||
+            conversation.phase === "completed"
+        ) {
+
+            return Response.json({
+
+                faq: false,
+
+                reply:
+                    "You're all set! 🎉\n\nFeel free to ask me anything else about Online MBA programmes, universities, fees, or admissions.",
+
+                profileUpdates: {},
+
+                nextStep: "completed",
+
+                phase: "completed",
+
+                suggestions: [],
+
+                recommendations:
+                    conversation.recommendations,
+
+                feeBreakdown:
+                    conversation.feeBreakdown,
+
+                applyUrl:
+                    conversation.applyUrl,
+
+                completed: true,
+
+                lockInput: true,
+            });
+        }
+    }
 
     if (intent.intent === "smalltalk") {
         const replies = [

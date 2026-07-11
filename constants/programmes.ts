@@ -11,6 +11,7 @@ export const programmes: Programme[] = [
         fees: {
             admissionFee: 10000,
             total: 146240,
+            feesRange: "₹1.6L - 1.8L",
             perSemester: 40400,
             emiPerMonth: 7087,
             currency: "INR",
@@ -101,6 +102,7 @@ export const programmes: Programme[] = [
         fees: {
             admissionFee: 10000,
             total: 180000,
+            feesRange: "₹1.5L - 1.8L",
             perSemester: 45400,
             emiPerMonth: 7500,
             currency: "INR",
@@ -190,6 +192,7 @@ export const programmes: Programme[] = [
         fees: {
             admissionFee: 12000,
             total: 207000,
+            feesRange: "₹2L - 2.25L",
             perSemester: 56300,
             emiPerMonth: 8906,
             currency: "INR",
@@ -279,6 +282,7 @@ export const programmes: Programme[] = [
         fees: {
             admissionFee: 10000,
             total: 94000,
+            feesRange: "₹90K - 1L",
             perSemester: 24500,
             emiPerMonth: 3956,
             currency: "INR",

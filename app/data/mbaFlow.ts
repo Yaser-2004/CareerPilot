@@ -89,7 +89,7 @@ What is the highest qualification you've completed? 🎓`,
     goal: {
         step: "goal",
 
-        messages: [`Nice! {{specialization}} is one of the most preferred backgrounds for MBA aspirants.`, `Now, let's understand your career goal.
+        messages: [`{{specializationMessage}}
 What's inspiring you to pursue an Online MBA?`],
 
         inputType: "chips",
