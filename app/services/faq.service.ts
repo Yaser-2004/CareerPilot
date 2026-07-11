@@ -74,6 +74,14 @@ export async function streamFaqResponse(
             emiAvailable: p.fees.emiAvailable,
             paymentOptions: p.fees.paymentOptions,
             scholarships: p.fees.hasScholarships,
+            scholarshipEligibility: p.fees.scholarshipEligibility,
+        },
+
+        eligibility: {
+            minimumQualification: p.eligibility.minimumQualification,
+            preferredMarks: p.eligibility.preferredMarks,
+            entranceRequired: p.eligibility.entranceRequired,
+            experienceRequired: p.eligibility.experienceRequired,
         },
 
         duration: p.duration,
@@ -89,6 +97,8 @@ export async function streamFaqResponse(
         careerOutcomes: p.careerOutcomes,
 
         placements: p.placements?.typicalRecruiters,
+
+        admissionProcess: p.admissionProcess,
     }));
 
 
