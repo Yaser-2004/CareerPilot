@@ -16,7 +16,14 @@ import {
 } from "@/app/stores/chat.selectors";
 
 function getActiveJourneyId(phase: string) {
-    if (phase === "completed") return "applications";
+    if (
+        phase === "completed" ||
+        phase === "schedule_date" ||
+        phase === "schedule_time" ||
+        phase === "callback_time"
+    ) {
+        return "applications";
+    }
     if (phase === "fees" || phase === "programme") return "fees";
     if (phase === "recommendations") return "recommendations";
     return "profile";

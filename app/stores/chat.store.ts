@@ -705,6 +705,7 @@ What name should I use for your personalized recommendations?`,
 
                     chatMode: "faq",
                     isInputLocked: false,
+                    isCompleted: false,
 
                     messages: [
                         ...state.conversation.messages,
@@ -893,6 +894,9 @@ You'll also receive a confirmation on your WhatsApp shortly.`,
                             type: "ask_another_question",
                         },
                     ],
+                    phase: "completed",
+                    isCompleted: true,
+                    isInputLocked: true,
                 },
             }));
         },
@@ -971,12 +975,8 @@ Please keep your phone nearby. We look forward to speaking with you!`,
                             type: "ask_another_question",
                         },
                     ],
-                },
-            }));
-
-            set((state) => ({
-                conversation: {
-                    ...state.conversation,
+                    phase: "completed",
+                    isCompleted: true,
                     isInputLocked: true,
                 },
             }));
@@ -1099,6 +1099,9 @@ We'll do our best to contact you within your preferred time slot.`,
                             type: "ask_another_question",
                         },
                     ],
+                    phase: "completed",
+                    isCompleted: true,
+                    isInputLocked: true,
                 },
             }));
         },

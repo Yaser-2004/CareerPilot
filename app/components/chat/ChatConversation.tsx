@@ -144,6 +144,9 @@ export function ChatConversation() {
             case "callback_slots":
                 return <CallbackTimePicker />;
 
+            case "ask_another_question":
+                return <AskAnotherQuestionCard />;
+
             default:
                 return null;
         }
@@ -199,7 +202,9 @@ export function ChatConversation() {
                     <AnimatePresence initial={false}>
                         {messages.map((message, index) => (
                             <div key={message.id}>
-                                <MessageBubble message={message} />
+                                {message.type !== "ask_another_question" && (
+                                    <MessageBubble message={message} />
+                                )}
                                 {/* Recommendation Cards */}
 
                                 {message.content.includes("handpicked the best Online MBA programs for you") &&

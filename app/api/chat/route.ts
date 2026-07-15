@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     // ---------------- POST-ONBOARDING FAQ MODE ----------------
 
-    if (conversation.chatMode === "faq" && !conversation.isCompleted) {
+    if (conversation.chatMode === "faq" || conversation.phase === "completed") {
 
         const intent = await detectIntent(
             message,
@@ -164,8 +164,7 @@ export async function POST(req: NextRequest) {
     if (intent.intent === "smalltalk") {
 
         if (
-            conversation.phase === "fees" ||
-            conversation.phase === "completed"
+            conversation.phase === "fees"
         ) {
 
             return Response.json({
