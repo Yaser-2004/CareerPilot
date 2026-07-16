@@ -45,3 +45,29 @@ export async function groqText(prompt: string) {
 
     return response.choices[0].message.content!;
 }
+
+export async function groqJSON70(prompt: string) {
+    const response = await groq.chat.completions.create({
+        model: "llama-3.3-70b-versatile",
+
+        temperature: 0,
+
+        response_format: {
+            type: "json_object",
+        },
+
+        messages: [
+            {
+                role: "system",
+                content:
+                    "Return ONLY valid JSON. Never use markdown. Never explain.",
+            },
+            {
+                role: "user",
+                content: prompt,
+            },
+        ],
+    });
+
+    return JSON.parse(response.choices[0].message.content!);
+}

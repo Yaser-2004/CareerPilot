@@ -12,29 +12,14 @@ export function matchOption(
     input: string,
     options: ChatSuggestion[]
 ): ChatSuggestion | null {
+
     const value = normalize(input);
 
-    // Exact match
-    const exact = options.find(
-        (option) =>
-            normalize(option.value) === value ||
-            normalize(option.label) === value
+    return (
+        options.find(
+            option =>
+                normalize(option.value) === value ||
+                normalize(option.label) === value
+        ) ?? null
     );
-
-    if (exact) return exact;
-
-    // Partial match
-    const partial = options.find((option) => {
-        const optionValue = normalize(option.value);
-        const optionLabel = normalize(option.label);
-
-        return (
-            optionValue.includes(value) ||
-            value.includes(optionValue) ||
-            optionLabel.includes(value) ||
-            value.includes(optionLabel)
-        );
-    });
-
-    return partial ?? null;
 }

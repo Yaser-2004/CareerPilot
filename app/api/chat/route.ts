@@ -51,6 +51,8 @@ export async function POST(req: NextRequest) {
 
                 phase: "completed",
 
+                chatMode: "completed",
+
                 suggestions: [],
 
                 recommendations: conversation.recommendations,
@@ -126,6 +128,27 @@ export async function POST(req: NextRequest) {
         conversation.profile,
         conversation.recommendations
     );
+
+    // ---------- Conversation End (mid-flow guard) ----------
+    // conversation_end should only be possible after fees phase
+    if (intent.intent === "conversation_end") {
+        return Response.json({
+            faq: false,
+            replies: [
+                "It was a pleasure helping you with your Online MBA journey. 😊\n\nIf you ever have more questions, CareerPilot will be here to assist you. Wishing you all the best for your admissions!"
+            ],
+            profileUpdates: {},
+            nextStep: "completed",
+            phase: "completed",
+            suggestions: [],
+            recommendations: conversation.recommendations,
+            feeBreakdown: conversation.feeBreakdown,
+            applyUrl: conversation.applyUrl,
+            completed: true,
+            lockInput: true,
+            showAskAnotherQuestion: false,
+        });
+    }
 
     // ---------- Greeting -----------
     if (intent.intent === "greeting") {
@@ -346,7 +369,7 @@ export async function POST(req: NextRequest) {
     const result = await handleChat(
         message,
         conversation,
-        intent.normalizedValue
+        intent.value
     );
 
     const updatedProfile = {

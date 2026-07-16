@@ -245,7 +245,7 @@ export function ChatConversation() {
                             <NextActionsCard />
                         } */}
 
-                        {isCompleted && conversation.chatMode === "faq" && (
+                        {isCompleted && conversation.chatMode === "completed" && (
                             <AskAnotherQuestionCard />
                         )}
 

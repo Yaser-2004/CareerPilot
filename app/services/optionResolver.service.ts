@@ -1,5 +1,5 @@
 import { ChatSuggestion } from "@/app/types/chat";
-import { groqJSON } from "@/lib/groqRequest";
+import { groqJSON, groqJSON70 } from "@/lib/groqRequest";
 
 interface ResolveResponse {
     matched: boolean;
@@ -11,58 +11,117 @@ export async function resolveOption(
     options: ChatSuggestion[]
 ): Promise<ChatSuggestion | null> {
 
-    const result = await groqJSON(`
-You are matching a user's answer to ONE of the available options.
+    const result = await groqJSON70(`
+You are an option selection assistant.
 
-User answer:
-"${userInput}"
+Your task is to map the user's message to EXACTLY ONE of the available options.
 
 Available options:
 
-${options
-            .map((o) => `- ${o.value}`)
-            .join("\n")}
+${options.map(o => `- ${o.value}`).join("\n")}
 
-Rules:
+User input:
+"${userInput}"
 
-- Return matched=true ONLY if the user's answer clearly refers to one of the available options.
-- If the answer is unrelated, nonsense, random text, or ambiguous, return matched=false.
-- Do NOT guess.
-- Do NOT use spelling similarity alone.
-- If confidence is below 95%, return matched=false.
-- Examples:
+IMPORTANT:
 
-User: "Computer"
-→ Computer Science
+The available options are categories (buckets), not exact phrases.
 
-User: "CSE"
-→ Computer Science
+The user does NOT have to use the same wording.
 
-User: "cs"
-→ Computer Science
+Always understand the user's intent first, then choose the option that best represents it.
 
-User: "book"
-→ matched=false
+Guidelines:
 
-User: "hello"
-→ matched=false
+- Return ONLY one of the available option values.
+- Never invent a new value.
+- Consider the full meaning of the sentence.
+- Numbers are more important than matching words.
+- If the user expresses a maximum ("below", "under", "up to", "maximum"), choose the highest bucket that does NOT exceed that limit.
+- If the user expresses a minimum ("above", "more than", "greater than"), choose the bucket that starts from or exceeds that limit.
+- If the user clearly refers to one category, return matched=true.
+- Only return matched=false if the message is unrelated or impossible to classify.
 
-User: "asdf"
-→ matched=false
+Examples:
 
-User: "pizza"
-→ matched=false
+Available options:
+- Below ₹1L
+- ₹1-1.5L
+- ₹1.5-2L
+- Above ₹2L
+- Need EMI
+
+User: below 2L
+Response:
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+User: under 2 lakh
+Response:
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+User: maximum 2 lakh
+Response:
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+User: up to 2L
+Response:
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+User: around 1.8 lakh
+Response:
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+User: I need EMI
+Response:
+{
+  "matched": true,
+  "value": "Need EMI"
+}
+
+User: pizza
+Response:
+{
+  "matched": false
+}
+
+Return ONLY valid JSON.
+
+Example:
+
+{
+  "matched": true,
+  "value": "₹1.5-2L"
+}
+
+or
+
+{
+  "matched": false
+}
 `);
 
-    const response =
-        result as ResolveResponse;
+    const response = result as ResolveResponse;
 
-    if (!response.matched)
+    if (!response.matched) {
         return null;
+    }
 
     return (
-        options.find(
-            (o) => o.value === response.value
-        ) ?? null
+        options.find(option => option.value === response.value) ?? null
     );
 }

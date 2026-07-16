@@ -80,7 +80,7 @@ interface ChatStore {
     ) => Promise<void>;
 
     setChatMode: (
-        mode: "flow" | "faq"
+        mode: "flow" | "faq" | "completed"
     ) => void;
 
     setInputLocked: (
@@ -122,7 +122,7 @@ interface ChatApiResponse {
 
     faq?: boolean;
 
-    chatMode?: "flow" | "faq";
+    chatMode?: "flow" | "faq" | "completed";
 
     lockInput?: boolean;
 
@@ -355,6 +355,15 @@ What name should I use for your personalized recommendations?`,
                 content: "",
                 timestamp: Date.now(),
             };
+
+            const state = get();
+
+            if (
+                state.conversation.chatMode === "completed" ||
+                state.conversation.isInputLocked
+            ) {
+                return;
+            }
 
             set((state) => ({
                 conversation: {

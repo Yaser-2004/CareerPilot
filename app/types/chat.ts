@@ -65,7 +65,7 @@ export interface ConversationState {
 
     summary: string;
 
-    chatMode: "flow" | "faq" | "schedule";
+    chatMode: "flow" | "faq" | "completed";
 
     isInputLocked: boolean;
 
